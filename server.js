@@ -1,38 +1,38 @@
-// express
-// var express = require("express");
-// var app = express();
-// // Configure middleware
+express
+var express = require("express");
+var app = express();
+// Configure middleware
 
-// // express-handlebars
-// var exphbs = require("express-handlebars");
-// app.engine("handlebars", exphbs({
-//     defaultLayout: "main"
-// }));
-// app.set("view engine", "handlebars");
-// // mongoose
-// var mongoose = require("mongoose");
-// // body-parser
-// var bodyParser = require("body-parser");
-// // cheerio
+// express-handlebars
+var exphbs = require("express-handlebars");
+app.engine("handlebars", exphbs({
+    defaultLayout: "main"
+}));
+app.set("view engine", "handlebars");
+// mongoose
+var mongoose = require("mongoose");
+// body-parser
+var bodyParser = require("body-parser");
+// cheerio
 var cheerio = require("cheerio");
 // request
 var request = require("request");
 
 // Require all models
-// var db = require("./models");
-// var port = process.env.PORT || 3000;
-// // Initialize Express
+var db = require("./models");
+var port = process.env.PORT || 3000;
+// Initialize Express
 
-// // Use body-parser for handling form submissions
-// app.use(bodyParser.urlencoded({
-//     extended: false
-// }));
-// // Use express.static to serve the public folder as a static directory
-// app.use(express.static("public"));
+// Use body-parser for handling form submissions
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
+// Use express.static to serve the public folder as a static directory
+app.use(express.static("public"));
 
-// // Import routes and give the server access to them.
-// var routes = require("./app/controller/news_controller.js");
-// app.use("/", routes);
+// Import routes and give the server access to them.
+var routes = require("./app/controller/news_controller.js");
+app.use("/", routes);
 
 
 request("https://www.usatoday.com/news/world/", function (error, response, html) {
