@@ -1,0 +1,52 @@
+.main {
+    height: 800px;
+    background-image: url(./app/public/assets/images/charlotte-188983.jpg);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: black;
+    
+}
+
+
+#headings {
+    text-align: center;
+    background-color: grey;
+    width: 300px;
+    position: relative;
+    left: 950px;
+    top: 200px;
+
+}
+
+p1,
+p2 {
+    font-style: bold;
+    text-align: center;
+    color: black;
+}
+
+p1 {
+    font-size: 72px;
+}
+
+
+p2 {
+    font-size: 48px;
+}
+
+
+p4 {
+    color: grey;
+    position: relative;
+    left: 0px;
+    top: 510px;
+} 
+
+
+
+
+
+    
+
+

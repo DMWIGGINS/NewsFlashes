@@ -1,14 +1,8 @@
-express
 var express = require("express");
-var app = express();
 // Configure middleware
 
 // express-handlebars
 var exphbs = require("express-handlebars");
-app.engine("handlebars", exphbs({
-    defaultLayout: "main"
-}));
-app.set("view engine", "handlebars");
 // mongoose
 var mongoose = require("mongoose");
 // body-parser
@@ -17,23 +11,32 @@ var bodyParser = require("body-parser");
 var cheerio = require("cheerio");
 // request
 var request = require("request");
+var logger = require("morgan");
 
 // Require all models
 var db = require("./models");
 var port = process.env.PORT || 3000;
 // Initialize Express
-
+var app = express();
+app.use(logger("dev"));
+app.engine("handlebars", exphbs({
+  defaultLayout: "main"
+}));
+app.set("view engine", "handlebars");
 // Use body-parser for handling form submissions
 app.use(bodyParser.urlencoded({
-    extended: false
+  extended: false
 }));
 // Use express.static to serve the public folder as a static directory
 app.use(express.static("public"));
 
 // Import routes and give the server access to them.
-var routes = require("./app/controller/news_controller.js");
-app.use("/", routes);
+// var routes = require("./app/controller/news_controller.js");
+// app.use("/", routes);
 
+mongoose.connect("mongodb://localhost/", {
+  useMongoClient: true
+});
 
 request("https://www.usatoday.com/news/world/", function (error, response, html) {
   // Load the HTML into cheerio and save it to a variable
