@@ -1,6 +1,6 @@
 # NewsFlashes
 
-Welcome to NewsFlashes where you can access articles from the *World News Section* of **USA Today**.
+Welcome to NewsFlashes where you can access articles from the *World News* Section of **USA Today**.
 
 - You will see the title and summary of recent articles.
 
