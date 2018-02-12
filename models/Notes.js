@@ -8,10 +8,13 @@ var NotesSchema = new Schema({
   title: String,
   // `body` is of type String
   body: String,
-  // 'saved' is of type Boolean
-  saved: Boolean
+  // 'saved' is of type Boolean 
+  saved: {
+    type: Boolean,
+    default: false
+  },
 });
 // This creates our model from the above schema, using mongoose's model method
-var Notes = mongoose.model("Notes", NoteSchema);
+var Notes = mongoose.model("Notes", NotesSchema);
 // Export the Notes model
 module.exports = Notes;

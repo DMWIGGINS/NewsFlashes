@@ -1,27 +1,42 @@
 var express = require("express");
-var db = require("../../models");
 var router = express.Router();
+var db = require("../../models");
+var request = require('request');
+var cheerio = require('cheerio');
 
-function getNewsflashes() {
-    // Grab every document in the Articles collection
+
+function getNewsFlashes(req, res) {
+    console.log("I'm in getNewsFlashes");
+
+    // Grab every document in the Newsflash collection
     db.Newsflash.find({})
+
         .then(function (dbNewsflash) {
-            // If we were able to successfully find Articles, send them back to the client
+            // If we were able to successfully find Newsflashes, send them back to the client
+
+           
+
             res.json(dbNewsflash);
+            console.log("this is dbNewsFlash in getNewsFlashes" + dbNewsflash);
+            console.log("this is newsFlash in getNewsFlashes" + newsFlash);
+
         })
         .catch(function (err) {
             // If an error occurred, send it to the client
             res.json(err);
         });
-    res.render("index");
+    console.log("got NewsFlashes");
+
+    // res.render("index", newsFlash);
 };
 
-function getSavedNews() {
-
+function getSavedNews(req, res) {
+    console.log("I'm in getSavedNews");
+    // res.render("savednews", savedNewsFlash);
 }
 
 router.get("/scrape", function (req, res) {
-
+    console.log("I'm in scrape in the controller");
     request("https://www.usatoday.com/news/world/", function (error, response, html) {
 
         // Load the HTML into cheerio and save it to a variable
@@ -29,11 +44,11 @@ router.get("/scrape", function (req, res) {
         var $ = cheerio.load(html);
 
         // An empty array to save the data that we'll scrape
-        var results = [];
 
         // chose the element span with class hgpm-list-hed as a starting point to be able to access all needed article info
         $("span.hgpm-list-hed").each(function (i, element) {
 
+            var results = [];
             // Save the text of the element in a "title" variable
             var title = $(element).text();
 
@@ -51,10 +66,10 @@ router.get("/scrape", function (req, res) {
                 saved: false
             });
 
-            db.Newsflash.create(result)
+            db.Newsflash.create(results)
                 .then(function (dbNewsflash) {
                     // View the added result in the console
-                    console.log(dbNewsflash);
+                    console.log("dbNewsFlash after scraping and adding to the database" + dbNewsflash);
                 })
                 .catch(function (err) {
                     // If an error occurred, send it to the client
@@ -64,22 +79,26 @@ router.get("/scrape", function (req, res) {
         // Log the results once you've looped through each of the elements found with cheerio
 
         res.send("Scrape Complete");
-        getNewsFlashes();
+        getNewsFlashes(req, res);
+        // res.render("index", newsFlash );
     });
 });
 
-// Default route and route for getting the Newsflashes from the database
 router.get("/", function (req, res) {
-    getNewsflashes();
+    res.send("Hello world");
 });
+// Default route and route for getting the Newsflashes from the database
+// router.get("/", function (req, res) {
+//     getNewsflashes(req, res);
+// });
 
 router.get("/newsflashes", function (req, res) {
-    getNewsflashes();
+    getNewsFlashes(req, res);
 });
 
 // Route for the savednews page 
 router.get("/savednews", function (req, res) {
-    getSavedNews();
+    getSavedNews(req, res);
 
 });
 
@@ -93,3 +112,6 @@ router.post("/api/notes/:id", function (req, res) {
 router.delete("/api/notes/:id", function (req, res) {
 
 });
+
+// export router for server.js 
+module.exports = router;
