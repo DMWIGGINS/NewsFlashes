@@ -26,3 +26,7 @@ Some of the *technologies* used are:
 - MongoDB and Mongoose
 - Handlebars
 - Cheerio
+- JavaScript
+- HTML
+- CSS
+
