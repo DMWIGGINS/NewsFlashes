@@ -79,7 +79,7 @@ router.get("/scrape", function (req, res) {
         // Log the results once you've looped through each of the elements found with cheerio
 
         res.send("Scrape Complete");
-        getNewsFlashes(req, res);
+        // getNewsFlashes(req, res);
         // res.render("index", newsFlash );
     });
 });
