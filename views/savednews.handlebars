@@ -1,0 +1,46 @@
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Saved Articles</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02"
+            aria-expanded="false" aria-label="Toggle navigation" style="">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarColor02">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Saved Articles</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+       </div>
+     <br>
+    <div id="scrapedNews">{{#each newsFlash}}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col" >{{this.title}}</th>
+                    <th>
+                        <button class="btn btn-danger" id="deleteNewsBtn">Delete from Saved</button>
+                        <button class="btn btn-warning" id="seeNotesBtn">Article Notes</button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table-success">
+                    <th scope="row">{{this.summary}}</th>
+                    <th></th>
+                </tr>
+            </tbody>
+        </table>
+        {{/each}}
+ 
+   
+    
+</body>
+
+</html>
