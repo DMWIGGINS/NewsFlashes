@@ -17,13 +17,23 @@
             </ul>
         </div>
     </nav>
-       </div>
-     <br>
+    <div class="main">
+        <div id="headings">
+            <p2 class="text-success">Saved Articles</p2>
+            <br>
+            <p1>USA Today</p1>
+            <br>
+            <p2>World News</p2>
+        </div>
+        <p4>Photo by charlotte on Unsplash</p4>
+
+    </div>
+    <br>
     <div id="savedNews">{{#each savedNewsFlash}}
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th scope="col" >{{this.title}}</th>
+                    <th scope="col">{{this.title}}</th>
                     <th>
                         <button class="btn btn-danger" id="deleteNewsBtn">Delete from Saved</button>
                         <button class="btn btn-warning" id="seeNotesBtn">Article Notes</button>
@@ -38,9 +48,9 @@
             </tbody>
         </table>
         {{/each}}
- 
-   
-    
+
+
+
 </body>
 
 </html>

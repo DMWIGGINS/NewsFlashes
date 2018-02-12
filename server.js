@@ -1,26 +1,37 @@
+// express
 var express = require("express");
-// Configure middleware
 
 // express-handlebars
 var exphbs = require("express-handlebars");
+
 // mongoose
 var mongoose = require("mongoose");
+
 // body-parser
 var bodyParser = require("body-parser");
+
 // path
 var path = require("path");
+
 // cheerio
 var cheerio = require("cheerio");
+
 // request
 var request = require("request");
+
+// morgan
 var logger = require("morgan");
 
 // Require all models
 var db = require("./models");
+
 var PORT = process.env.PORT || 3000;
+
 // Initialize Express
 var app = express();
+
 app.use(logger("dev"));
+
 // express-handlebars
 var exphbs = require("express-handlebars")
 app.engine("handlebars", exphbs({
@@ -44,6 +55,7 @@ app.use(express.static("./app/public"));
 var routes = require("./app/controller/news_controller.js");
 app.use("/", routes);
 
+// Setting up database connection
 mongoose.Promise = Promise;
 mongoose.connect("mongodb://localhost/Newsflashes");
 

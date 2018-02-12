@@ -66,7 +66,9 @@ router.get("/scrape", function (req, res) {
                 saved: false
             });
 
+            // sending the results to the database
             db.Newsflash.create(results)
+
                 .then(function (dbNewsflash) {
                     // View the added result in the console
                     console.log("dbNewsFlash after scraping and adding to the database" + dbNewsflash);
@@ -101,8 +103,6 @@ router.get("/savednews", function (req, res) {
     getSavedNews(req, res);
 
 });
-
-
 
 // Route to add a new note
 router.post("/api/notes/:id", function (req, res) {
