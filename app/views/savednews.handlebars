@@ -1,6 +1,6 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">NewsFlashes</a>
+        <a class="navbar-brand" href="#">Saved Articles</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02"
             aria-expanded="false" aria-label="Toggle navigation" style="">
             <span class="navbar-toggler-icon"></span>
@@ -14,15 +14,12 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Saved Articles</a>
                 </li>
-                <li>
-                    <button type="button" class="btn btn-outline-success" id="scrapeBtn">Scrape New Articles!</button>
-                </li>
             </ul>
         </div>
     </nav>
     <div class="main">
         <div id="headings">
-            <p2>NewsFlashes</p2>
+            <p2 class="text-success">Saved Articles</p2>
             <br>
             <p1>USA Today</p1>
             <br>
@@ -31,14 +28,16 @@
         <p4>Photo by charlotte on Unsplash</p4>
 
     </div>
-     <br>
-    <div id="scrapedNews">{{#each newsFlash}}
+    <br>
+    <div id="savedNews">{{#each savedNewsFlash}}
+        {{#if saved}}}
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th scope="col" >{{this.title}}</th>
+                    <th scope="col">{{this.title}}</th>
                     <th>
-                        <button class="btn btn-success" id="saveBtn">Save NewsFlash</button>
+                        <button class="btn btn-danger" id="deleteNewsBtn">Delete from Saved</button>
+                        <button class="btn btn-warning" id="seeNotesBtn">Article Notes</button>
                     </th>
                 </tr>
             </thead>
@@ -49,10 +48,11 @@
                 </tr>
             </tbody>
         </table>
+        {{/if}}
         {{/each}}
- 
-   
-    
+
+
+
 </body>
 
 </html>
