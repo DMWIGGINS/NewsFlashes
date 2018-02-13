@@ -31,13 +31,12 @@
         <p4>Photo by charlotte on Unsplash</p4>
 
     </div>
-     <br>
-    <div id="scrapedNews">{{#each dbNewsflash}}
-        {{#unless saved}}
+    <br>
+    <div id="scrapedNews">{{#each dbNewsflash}} {{#unless saved}}
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th scope="col" >{{this.title}}</th>
+                    <th scope="col">{{this.title}}</th>
                     <th>
                         <button class="btn btn-success" id="saveBtn">Save NewsFlash</button>
                     </th>
@@ -50,11 +49,12 @@
                 </tr>
             </tbody>
         </table>
-        {{/unless}}
-        {{/each}}
- 
-   
-    
+        {{/unless}} {{/each}}
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">NewsFlashes scraped from USA Today</a>
+        </nav>
+
 </body>
 
 </html>

@@ -18,7 +18,7 @@
 //   });
 
   // $(document).on('click', '#saveBtn', function (event) {
-  console.log("saveBtn clicked");
+  // console.log("saveBtn clicked");
   //   // Make sure to preventDefault on a submit event.
 
   //   saveArticle();
