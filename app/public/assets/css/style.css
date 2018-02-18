@@ -19,6 +19,7 @@
 body {
     background-color: black;
 }
+
 p1,
 p2,
     {
@@ -48,4 +49,10 @@ p4 {
     position: relative;
     left: 0px;
     top: 510px;
+}
+
+#deleteNewsBtn,
+#seeNotesBtn,
+.save {
+    float: right;
 }
