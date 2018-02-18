@@ -58,7 +58,7 @@ function savedNewsFlashes(req, res) {
             if (err) {
                 res.status(500).end();
             } else if (data[0]) {
-                console.log("I'm in the else if");
+                console.log("I'm in the saved else if");
                 var news = {};
                 for (let i = 0; i < data.length; i++) {
                     news = {
@@ -68,16 +68,19 @@ function savedNewsFlashes(req, res) {
                         id: data[i].id,
                         saved: data[i].saved
                     }
+
                     newsFlashes.push(news);
-                    // console.log(data[0].title);
+                    console.log(data[0].title);
 
                 }
                 res.render("savednews", {
                     newsFlash: newsFlashes
                 });
-
-
-            };
+            } else {
+                res.render("savednews", {
+                    newsFlash: newsFlashes
+                });
+            }
         });
 };
 
@@ -104,10 +107,8 @@ router.get("/scrape", function (req, res) {
 
             // Save the article summary in a "summary" variable
             // accessing the link to the article by the "href" attribute of it's great grandparents
-            var linkMap = $(element).parent().parent().parent().attr("href");
-            var link = "https://www.usatoday.com/news/world/" + linkMap;
+            var link = $(element).parent().parent().parent().attr("href");
 
-            // Save these results in an object that we'll push into the results array we defined earlier
             results.push({
                 title: title,
                 summary: summary,
@@ -135,8 +136,8 @@ router.get("/scrape", function (req, res) {
     // setTimeout(getNewsFlashes(res), 3000);
     // setTimeout(function(){ alert("Hello"); }, 3000);
     // setTimeout(getNewsFlashes, 3000);
-        
-    
+
+
     // // getNewsFlashes(res);
     getNewsFlashes(res);
 });
@@ -159,34 +160,54 @@ router.get("/savednews", function (req, res) {
 });
 
 // Route to save an article
-router.put("api/savednews/:id", function (req, res) {
+router.put("/api/savednews/:id", function (req, res) {
     console.log("controller saving article");
+    console.log(req.params.id);
+    db.Newsflash.update({
+        "_id": req.params.id
+    }, {
+        $set: {
+            "saved": true
+        }
+    }).then(function (data, err) {
+        console.log("I'm out of the database");
 
+        if (err) {
+            // If an error occurred, send a generic server failure
+            console.log("an error occurred");
+            console.log(err);
+            res.status(500).end();
+        } else if (data) {
+            console.log(data);
+            console.log("article is deleted");
+            savedNewsFlashes(req, res);
+        }
+    });
 
-    try {
-        db.Newsflash.updateOne({
-            "id": req.params.id
-        }, {
-            $set: {
-                "saved": true
-            }
-        });
-    } catch (e) {
-        print(e);
-    }
-    //   burger.updateOne({
-    //     saved: req.body.saved
-    //   }, condition, function (result) {
-    //     if (result.changedRows == 0) {
-    //       return res.status(404).end();
-    //     } else {
-    //       res.status(200).end();
-    //     }
-    //   });
 });
 
 // Route to  an delete an article from the saved list
-router.delete("api/savednews/:id", function (req, res) {
+router.delete("/api/savednews/:id", function (req, res) {
+
+    console.log("controller deleting article");
+    console.log(req.params.id);
+    db.Newsflash.deleteOne({
+        "_id": req.params.id
+    }).then(function (data, err) {
+        console.log("I'm out of the database delete");
+
+        if (err) {
+            // If an error occurred, send a generic server failure
+            console.log("an error occurred");
+            console.log(err);
+            res.status(500).end();
+        } else if (data) {
+            console.log(data);
+            console.log("article is deleted");
+            savedNewsFlashes(req, res);
+        }
+    });
+
 
 });
 

@@ -29,13 +29,18 @@
 
     </div>
     <br>
-    <div id="savedNews">{{#each NewsFlash}} {{#if saved}}
+    <div id="savedNews">
+        {{#each newsFlash}} {{#if saved}}
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th scope="col">{{this.title}}</th>
+                    <th scope="col" id="titlesize">
+                        <h4>
+                            <a href="{{this.link}}">{{this.title}}</a>
+                        </h4>
+                    </th>
                     <th>
-                        <button class="btn btn-danger" id="deleteNewsBtn">Delete from Saved</button>
+                        <button class="btn btn-danger" id="deleteNewsBtn" data-id="{{id}}">Delete from Saved</button>
                         <button class="btn btn-warning" id="seeNotesBtn">Article Notes</button>
                     </th>
                 </tr>
@@ -48,10 +53,11 @@
             </tbody>
         </table>
         {{/if}} {{/each}}
-
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">NewsFlashes scraped from USA Today</a>
-        </nav>
+    </div>
+    
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">NewsFlashes scraped from USA Today</a>
+    </nav>
 
 </body>
 
