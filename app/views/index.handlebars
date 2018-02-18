@@ -15,7 +15,7 @@
                     <a class="nav-link" href="/savednews">Saved Articles</a>
                 </li>
                 <li>
-                    <button type="button" class="btn btn-outline-success" id="scrapeBtn">Scrape New Articles!</button>
+                    <button type="button" class="btn btn-outline-success" id="scrape">Scrape New Articles!</button>
                 </li>
             </ul>
         </div>
@@ -37,9 +37,9 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th scope="col">{{this.title}}</th>
+                    <th scope="col" id="titlesize"><h4><a href="{{this.link}}">{{this.title}}</a></h4></th>
                     <th>
-                        <button class="btn btn-success" id="{{this.id}}">Save NewsFlash</button>
+                        <button class="btn btn-success save" id="saveBtn" data-id="{{id}}" data-issaved="{{saved}}">Save NewsFlash</button>
                     </th>
                 </tr>
             </thead>

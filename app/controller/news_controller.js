@@ -30,28 +30,56 @@ function getNewsFlashes(req, res) {
                         saved: data[i].saved
                     }
                     newsFlashes.push(news);
-                    // console.log(data[0].title);
+                    console.log(data[0].title);
 
                 }
                 res.render("index", {
                     newsFlash: newsFlashes
                 });
-                // If we were able to successfully find Newsflashes, send them back to the client
-            };
-            // console.log("dbNewsflash is " + dbNewsflash);
-
-            // console.log("this is dbNewsFlash in getNewsFlashes" + dbNewsflash);
-
-            // .catch(function (err) {
-            //     // If an error occurred, send it to the client
-            //     res.json(err);
-            // });
-            // console.log("got NewsFlashes");
-
+            } else {
+                res.render("index", {
+                    newsFlash: newsFlashes
+                });
+            }
         });
 };
 
+function savedNewsFlashes(req, res) {
+    console.log("I'm in savedNewsFlashes");
 
+    // Grab every document in the Newsflash collection
+    db.Newsflash.find({})
+
+        .then(function (data, err) {
+            // console.log("Here is the data" + data[1]);
+            // console.log(data[0]);
+            var newsFlashes = [];
+
+            if (err) {
+                res.status(500).end();
+            } else if (data[0]) {
+                console.log("I'm in the else if");
+                var news = {};
+                for (let i = 0; i < data.length; i++) {
+                    news = {
+                        title: data[i].title,
+                        summary: data[i].summary,
+                        link: data[i].link,
+                        id: data[i].id,
+                        saved: data[i].saved
+                    }
+                    newsFlashes.push(news);
+                    // console.log(data[0].title);
+
+                }
+                res.render("savednews", {
+                    newsFlash: newsFlashes
+                });
+
+
+            };
+        });
+};
 
 
 router.get("/scrape", function (req, res) {
@@ -74,8 +102,10 @@ router.get("/scrape", function (req, res) {
             // Save the article summary in a "summary" variable
             var summary = $(element).next().attr("data-fulltext");
 
+            // Save the article summary in a "summary" variable
             // accessing the link to the article by the "href" attribute of it's great grandparents
-            var link = $(element).parent().parent().parent().attr("href");
+            var linkMap = $(element).parent().parent().parent().attr("href");
+            var link = "https://www.usatoday.com/news/world/" + linkMap;
 
             // Save these results in an object that we'll push into the results array we defined earlier
             results.push({
@@ -84,7 +114,7 @@ router.get("/scrape", function (req, res) {
                 link: link,
                 saved: false
             });
-
+            // var i = results.length;
             // sending the results to the database
             db.Newsflash.create(results)
 
@@ -97,13 +127,18 @@ router.get("/scrape", function (req, res) {
                     return res.json(err);
                 });
         });
+
+
         // Log the results once you've looped through each of the elements found with cheerio
-
-        res.send("Scrape Complete");
-
-        getNewsFlashes(res);
-
     });
+    // getNewsFlashes(res);
+    // setTimeout(getNewsFlashes(res), 3000);
+    // setTimeout(function(){ alert("Hello"); }, 3000);
+    // setTimeout(getNewsFlashes, 3000);
+        
+    
+    // // getNewsFlashes(res);
+    getNewsFlashes(res);
 });
 
 
@@ -119,12 +154,39 @@ router.get("/newsflashes", function (req, res) {
 
 // Route for the savednews page 
 router.get("/savednews", function (req, res) {
-    getSavedNews(req, res);
+    savedNewsFlashes(req, res);
 
 });
 
 // Route to save an article
 router.put("api/savednews/:id", function (req, res) {
+    console.log("controller saving article");
+
+
+    try {
+        db.Newsflash.updateOne({
+            "id": req.params.id
+        }, {
+            $set: {
+                "saved": true
+            }
+        });
+    } catch (e) {
+        print(e);
+    }
+    //   burger.updateOne({
+    //     saved: req.body.saved
+    //   }, condition, function (result) {
+    //     if (result.changedRows == 0) {
+    //       return res.status(404).end();
+    //     } else {
+    //       res.status(200).end();
+    //     }
+    //   });
+});
+
+// Route to  an delete an article from the saved list
+router.delete("api/savednews/:id", function (req, res) {
 
 });
 
