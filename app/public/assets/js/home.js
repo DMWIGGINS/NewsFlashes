@@ -6,24 +6,17 @@ $(document).ready(function () {
 
   // });
 
-
-
-
   $(document).on('click', '#scrape', function (event) {
     console.log("I'm in scrape");
 
-
-    // $.getJSON("/scrape", function (data) {
-    // location.reload;
     $.ajax("/scrape", {
       type: "GET",
     }).then(
       function () {
         console.log("Scrape Successful in button function");
       });
+    location.reload;
   });
-
-
 
   $(document).on('click', '#saveBtn', function (event) {
     console.log("saveBtn clicked");
@@ -48,5 +41,4 @@ $(document).ready(function () {
     );
   });
 
-  // Make sure to preventDefault on a submit event.
 });
