@@ -35,8 +35,8 @@ $(document).on('click', '#seeNotesBtn', function (event) {
 $(document).on('click', '#addNotesBtn', function (event) {
     console.log("addNotesBtn clicked");
 
-           var id = $(this).data("id"),
-           
+           var id = $(this).data("id");
+
     
         // $('#notesModal').modal("data-show");
 
