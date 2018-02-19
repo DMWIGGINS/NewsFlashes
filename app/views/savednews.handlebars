@@ -1,4 +1,30 @@
 <body>
+
+    <!-- Modal -->
+    <div class="modal fade" id="seeNotesBtn" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h5 class="modal-title" id="exampleModalLabel">{{this.title}}</h5>
+                    <p>Newsflash ID: {{this.id}}</p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{!-- end modal --}}
+
+    
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="/savednews">Saved Articles</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02"
@@ -41,7 +67,11 @@
                     </th>
                     <th>
                         <button class="btn btn-danger" id="deleteNewsBtn" data-id="{{id}}">Delete from Saved</button>
-                        <button class="btn btn-warning" id="seeNotesBtn">Article Notes</button>
+
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-warning" id="seeNotesBtn" data-toggle="seeNotesBtn" data-target="#notesModel" data-id="{{id}}">Article Notes</button>
+
+
                     </th>
                 </tr>
             </thead>
@@ -54,7 +84,7 @@
         </table>
         {{/if}} {{/each}}
     </div>
-    
+
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">NewsFlashes scraped from USA Today</a>
     </nav>

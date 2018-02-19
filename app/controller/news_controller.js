@@ -117,6 +117,8 @@ router.get("/scrape", function (req, res) {
             });
             // var i = results.length;
             // sending the results to the database
+
+            // db.Newsflash.createIndex({title: "text"},{unique:true});
             db.Newsflash.create(results)
 
                 .then(function (dbNewsflash) {
@@ -210,6 +212,29 @@ router.delete("/api/savednews/:id", function (req, res) {
 
 
 });
+
+// Route to get existing notes on an article
+
+router.get("/api/notes/:id", function (req, res) {
+    // Using the id passed in the id parameter 
+    db.Newsflash.findOne({
+            _id: req.params.id
+        })
+        // ..and populate all of the notes associated with it
+        .populate("notes")
+        .then(function (dbNewsflash) {
+            console.log("I'm in get notes in the controller");
+            // If we were able to successfully find an Article with the given id, send it back to the client
+            console.log(dbNewsflash);
+            res.json(dbNewsflash);
+        })
+        .catch(function (err) {
+            // If an error occurred, send it to the client
+            res.json(err);
+        });
+});
+
+
 
 // Route to add a new note
 router.post("/api/notes/:id", function (req, res) {
