@@ -214,11 +214,10 @@ router.delete("/api/savednews/:id", function (req, res) {
 });
 
 // Route to get existing notes on an article
-
 router.get("/api/notes/:id", function (req, res) {
     // Using the id passed in the id parameter 
     db.Newsflash.findOne({
-            _id: req.params.id
+            "_id": req.params.id
         })
         // ..and populate all of the notes associated with it
         .populate("notes")
@@ -234,16 +233,35 @@ router.get("/api/notes/:id", function (req, res) {
         });
 });
 
-
-
 // Route to add a new note
 router.post("/api/notes/:id", function (req, res) {
-
+    db.Notes.create(data)
+        .then(function (dbNotes) {
+            // View the added result in the console
+            console.log("dbNotes after posting new note to the database");
+        })
+        .catch(function (err) {
+            // If an error occurred, send it to the client
+            return res.json(err);
+        });
 });
 
 // Route to delete a note
 router.delete("/api/notes/:id", function (req, res) {
-
+    db.Notes.deleteOne({
+        "_id": req.params.id
+    }).then(function (data, err) {
+        console.log("I'm out of the database delete");
+        if (err) {
+            // If an error occurred, send a generic server failure
+            console.log("an error occurred");
+            console.log(err);
+            res.status(500).end();
+        } else if (data) {
+            console.log(data);
+            console.log("note is deleted");
+        }
+    });
 });
 
 // export router for server.js 

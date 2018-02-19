@@ -20,14 +20,16 @@ $(document).on('click', '#deleteNewsBtn', function (event) {
 
 $(document).on('click', '#seeNotesBtn', function (event) {
     console.log("seeNotesBtn clicked");
+
     var id = $(this).data("id");
-    // $('#notesModal').modal("data-show");
+
 
     $.ajax("/api/notes/" + id, {
         type: "GET",
     }).then(
         function (data) {
             console.log(data);
+
         });
 });
 
@@ -35,26 +37,35 @@ $(document).on('click', '#seeNotesBtn', function (event) {
 $(document).on('click', '#addNotesBtn', function (event) {
     console.log("addNotesBtn clicked");
 
-           var id = $(this).data("id");
+    var id = $(this).data("id");
+    var text = $(".modal-body").text;
+    var newNote = {
+        _id: id,
+        text: text
+    }
+    // $('#notesModal').modal("data-show");
 
-    
-        // $('#notesModal').modal("data-show");
-
-        $.ajax("/api/notes/" + id, {
-            type: "POST",
-            data: newNote
-        }).then(
-            function (data) {
-                console.log(data);
-            });
+    $.ajax("/api/notes/" + id, {
+        type: "POST",
+        data: newNote
+    }).then(
+        function (data) {
+            console.log(data);
+            location.reload();
+        });
 });
 
 
+$(document).on('click', '#deleteNotesBtn', function (event) {
+    console.log("deleteNotesBtn clicked");
+    var id = $(this).data("id");
 
-
-
-//   $(document).on('click', '#deleteNotesBtn', function (event) {
-// console.log("deleteNotesBtn clicked");
-//     // Make sure to preventDefault on a submit event.
-
-//   });
+    $.ajax("/api/notes/" + id, {
+        type: "DELETE",
+    }).then(
+        function () {
+            console.log("You Deleted the Note");
+            // Reload the page to get the updated list
+            location.reload();
+        });
+});
