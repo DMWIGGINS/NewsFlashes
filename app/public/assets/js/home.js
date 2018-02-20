@@ -3,7 +3,7 @@ $(document).ready(function () {
   console.log("I'm in home");
 
 
-
+  // when scrape button is clicked send request to get scraped articles
   $(document).on('click', '#scrape', function (event) {
     console.log("I'm in scrape");
 
@@ -17,6 +17,7 @@ $(document).ready(function () {
     location.reload();
   });
 
+  // when saveBtn is clicked send request to move article from home page to saved page
   $(document).on('click', '#saveBtn', function (event) {
     console.log("saveBtn clicked");
 
@@ -38,7 +39,5 @@ $(document).ready(function () {
         location.reload();
       }
     );
-
   });
-
 });
