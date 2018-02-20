@@ -1,3 +1,4 @@
+// when deleteNewsBtn is clicked delete the article from the saved page 
 $(document).on('click', '#deleteNewsBtn', function (event) {
     console.log("deleteNewsBtn clicked");
 
@@ -14,22 +15,4 @@ $(document).on('click', '#deleteNewsBtn', function (event) {
             location.reload();
         }
     );
-});
-
-
-
-// $(document).on('click', '#seeNotesBtn', function (event) {
-//     console.log("seeNotesBtn clicked");
-
-//     var id = $(this).data("id");
-
-
-//     $.ajax("/notes/" + id, {
-//         type: "GET",
-//     }).then(
-//         function (data) {
-//             console.log("notes successful");
-//             location.reload();
-
-//         });
-// });
+})

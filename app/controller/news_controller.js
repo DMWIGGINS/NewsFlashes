@@ -4,6 +4,7 @@ var db = require("../../models");
 var request = require('request');
 var cheerio = require('cheerio');
 
+// Scraping function to access articles from USA Today
 function newsScrape(req, res) {
 
     request("https://www.usatoday.com/news/world/", function (error, response, html) {
@@ -56,7 +57,7 @@ function newsScrape(req, res) {
 
 };
 
-// Grab every document in the Newsflash collection
+// Grab every document in the Newsflash collection and use handlebars to render it on the home page
 function getNewsFlashes(req, res) {
     console.log("I'm in getNewsFlashes");
 
@@ -95,6 +96,7 @@ function getNewsFlashes(req, res) {
         });
 };
 
+// grab all savedNewsFlases and render them to the savednews page using handlebars
 function savedNewsFlashes(req, res) {
     console.log("I'm in savedNewsFlashes");
 
@@ -135,13 +137,13 @@ function savedNewsFlashes(req, res) {
         });
 };
 
-
+// get the notes related to a specific article
 function getNotes(req, res) {
-    db.Newsflash.find({
+    db.Newsflash.findOne({
             _id: req.params.id
         })
         // ..and populate all of the notes associated with it
-        .populate("notes")
+        .populate("Notes")
         .then(function (data, err) {
             console.log("I'm in get notes in the controller");
             console.log(data);
@@ -153,13 +155,15 @@ function getNotes(req, res) {
                 console.log("I'm in the notes gatherer");
                 var notes = {};
                 for (let i = 0; i < data.length; i++) {
-                    notes = {
-                        text: data[i].text,
+                    note = {
+                        text: note.text,
                         id: data[i].id,
+                        notes: data[i].notes
                     }
-                    existingNotes.push(notes);
-                    console.log(data[0].id);
-                    console.log(data[0].text);
+                    existingNotes.push(note);
+                    // console.log(data[0].notes);
+                    // console.log(data[0].id);
+                    // console.log(data[0].text);
                     console.log(existingNotes);
                 }
                 res.render("notes", {
@@ -171,10 +175,11 @@ function getNotes(req, res) {
                     id: req.params.id
 
                 });
-            }
+            };
         });
 };
 
+// Route to scrape the data and send it to the database
 router.get("/scrape", function (req, res) {
     console.log("I'm in scrape in the controller");
     newsScrape(req, res);

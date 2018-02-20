@@ -1,3 +1,4 @@
+// when addNotesBtn is clicked the text from the text box will be sent to the database
 $(document).on('click', '#addNotesBtn', function (event) {
     console.log("addNotesBtn clicked");
 
@@ -9,7 +10,6 @@ $(document).on('click', '#addNotesBtn', function (event) {
     }
     console.log(newNote);
 
-
     $.ajax("/api/notes/" + id, {
         type: "POST",
         data: newNote
@@ -20,7 +20,7 @@ $(document).on('click', '#addNotesBtn', function (event) {
         });
 });
 
-
+// when the deleteNotesBtn is clicked the note will be deleted from the database
 $(document).on('click', '#deleteNotesBtn', function (event) {
     console.log("deleteNotesBtn clicked");
     var id = $(this).data("id");
