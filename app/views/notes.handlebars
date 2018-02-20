@@ -1,6 +1,7 @@
 <body>
+
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="/newsflashes">NewsFlashes</a>
+        <a class="navbar-brand" href="#">Notes</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02"
             aria-expanded="false" aria-label="Toggle navigation" style="">
             <span class="navbar-toggler-icon"></span>
@@ -14,44 +15,58 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/savednews">Saved Articles</a>
                 </li>
-                <li>
-                    <button type="button" class="btn btn-outline-success" id="scrape">Scrape New Articles!</button>
-                </li>
             </ul>
         </div>
     </nav>
+
+
     <div class="main">
         <div id="headings">
-            <p2>NewsFlashes</p2>
+            <p5>Notes</p5>
             <br>
             <p1>USA Today</p1>
             <br>
             <p2>World News</p2>
         </div>
         <p4>Photo by charlotte on Unsplash</p4>
-
     </div>
+
     <br>
-    <div class="scrapedNews">
-        {{#each newsFlash}} {{#unless saved}}
+    <div class="notes">
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th scope="col" id="titlesize"><h4><a href="{{this.link}}">{{this.title}}</a></h4></th>
-                    <th>
-                        <button class="btn btn-success" id="saveBtn" data-id="{{id}}" data-issaved="{{saved}}">Save NewsFlash</button>
+                    <th scope="row">
+                        <h4>
+                            Notes for Article ID: {{id}}
+                        </h4>
                     </th>
+                    <th></th>
                 </tr>
             </thead>
-            <tbody>
-                <tr class="table-success">
-                    <th scope="row">{{this.summary}}</th>
-                    <th></th>
+            <tbody id="notesTable">
+                {{#each notesList}} {{#if saved}}
+                <tr class="table-info">
+                    <th scope="row">{{this.text}}</th>
+                    <th>
+                        <button class="btn btn-danger" id="deleteNotesBtn" data-id="{{this.id}}">Delete Note</button>
+                    </th>
+                </tr>
+                {{/if}} {{/each}}
+                <tr class="table-info">
+                    <th scope="row">
+                        <div class="form-group">
+                            <textarea class="form-control" id="newNote" rows="2" placeholder="Add New Note"></textarea>
+                        </div>
+                    </th>
+                    <th>
+                        <button type="submit" class="btn btn-success" id="addNotesBtn" data-id="{{id}}">Add Note</button>
+                    </th>
                 </tr>
             </tbody>
         </table>
-        {{/unless}} {{/each}}
     </div>
+
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">NewsFlashes scraped from USA Today</a>

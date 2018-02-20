@@ -2,9 +2,7 @@ $(document).ready(function () {
 
   console.log("I'm in home");
 
-  // $.getJSON("/newsflashes", function (data) {
 
-  // });
 
   $(document).on('click', '#scrape', function (event) {
     console.log("I'm in scrape");
@@ -15,7 +13,8 @@ $(document).ready(function () {
       function () {
         console.log("Scrape Successful in button function");
       });
-    location.reload;
+    alert("Scraping Articles from USA Today!");
+    location.reload();
   });
 
   $(document).on('click', '#saveBtn', function (event) {
@@ -39,7 +38,7 @@ $(document).ready(function () {
         location.reload();
       }
     );
-    
+
   });
 
 });
