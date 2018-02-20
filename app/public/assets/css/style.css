@@ -39,7 +39,8 @@ p1 {
 }
 
 p2,
-p3 {
+p3,
+p5 {
     font-size: 48px;
 }
 
@@ -51,8 +52,16 @@ p4 {
     top: 510px;
 }
 
+p5 {
+    font-style: bold;
+    text-align: center;
+    color: rgb(72, 8, 221)
+}
+
+#saveBtn,
 #deleteNewsBtn,
 #seeNotesBtn,
-.save {
+#deleteNotesBtn,
+#addNotesBtn {
     float: right;
 }

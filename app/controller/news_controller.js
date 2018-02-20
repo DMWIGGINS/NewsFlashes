@@ -4,11 +4,62 @@ var db = require("../../models");
 var request = require('request');
 var cheerio = require('cheerio');
 
+function newsScrape(req, res) {
 
+    request("https://www.usatoday.com/news/world/", function (error, response, html) {
+
+        // Load the HTML into cheerio and save it to a variable
+        // '$' becomes a shorthand for cheerio's selector commands, much like jQuery's '$'
+        var $ = cheerio.load(html);
+
+        // An empty array to save the data that we'll scrape
+
+        // choose the element span with class hgpm-list-hed as a starting point to be able to access all needed article info
+        $("span.hgpm-list-hed").each(function (i, element) {
+
+            var results = [];
+            // Save the text of the element in a "title" variable
+            var title = $(element).text();
+
+            // Save the article summary in a "summary" variable
+            var summary = $(element).next().attr("data-fulltext");
+
+            // Save the article summary in a "summary" variable
+            // accessing the link to the article by the "href" attribute of it's great grandparents
+            var link = $(element).parent().parent().parent().attr("href");
+
+            results.push({
+                title: title,
+                summary: summary,
+                link: link,
+                saved: false
+            });
+            // var i = results.length;
+            // sending the results to the database
+
+
+            db.Newsflash.create(results)
+
+                .then(function (dbNewsflash) {
+                    // View the added result in the console
+                    console.log("dbNewsFlash after scraping and adding to the database" + dbNewsflash);
+
+                })
+                .catch(function (err) {
+                    // If an error occurred, send it to the client
+                    return res.json(err);
+                });
+        });
+
+        // Log the results once you've looped through each of the elements found with cheerio
+    });
+
+};
+
+// Grab every document in the Newsflash collection
 function getNewsFlashes(req, res) {
     console.log("I'm in getNewsFlashes");
 
-    // Grab every document in the Newsflash collection
     db.Newsflash.find({})
 
         .then(function (data, err) {
@@ -85,63 +136,53 @@ function savedNewsFlashes(req, res) {
 };
 
 
+function getNotes(req, res) {
+    db.Newsflash.find({
+            _id: req.params.id
+        })
+        // ..and populate all of the notes associated with it
+        .populate("notes")
+        .then(function (data, err) {
+            console.log("I'm in get notes in the controller");
+            console.log(data);
+            // If we were able to successfully find an Article with the given id, send it back to the client
+            var existingNotes = [];
+            if (err) {
+                res.status(500).end();
+            } else if (data[0]) {
+                console.log("I'm in the notes gatherer");
+                var notes = {};
+                for (let i = 0; i < data.length; i++) {
+                    notes = {
+                        text: data[i].text,
+                        id: data[i].id,
+                    }
+                    existingNotes.push(notes);
+                    console.log(data[0].id);
+                    console.log(data[0].text);
+                    console.log(existingNotes);
+                }
+                res.render("notes", {
+                    notesList: existingNotes
+                });
+            } else {
+
+                res.render("notes", {
+                    id: req.params.id
+
+                });
+            }
+        });
+};
+
 router.get("/scrape", function (req, res) {
     console.log("I'm in scrape in the controller");
-    request("https://www.usatoday.com/news/world/", function (error, response, html) {
-
-        // Load the HTML into cheerio and save it to a variable
-        // '$' becomes a shorthand for cheerio's selector commands, much like jQuery's '$'
-        var $ = cheerio.load(html);
-
-        // An empty array to save the data that we'll scrape
-
-        // choose the element span with class hgpm-list-hed as a starting point to be able to access all needed article info
-        $("span.hgpm-list-hed").each(function (i, element) {
-
-            var results = [];
-            // Save the text of the element in a "title" variable
-            var title = $(element).text();
-
-            // Save the article summary in a "summary" variable
-            var summary = $(element).next().attr("data-fulltext");
-
-            // Save the article summary in a "summary" variable
-            // accessing the link to the article by the "href" attribute of it's great grandparents
-            var link = $(element).parent().parent().parent().attr("href");
-
-            results.push({
-                title: title,
-                summary: summary,
-                link: link,
-                saved: false
-            });
-            // var i = results.length;
-            // sending the results to the database
-
-            // db.Newsflash.createIndex({title: "text"},{unique:true});
-            db.Newsflash.create(results)
-
-                .then(function (dbNewsflash) {
-                    // View the added result in the console
-                    console.log("dbNewsFlash after scraping and adding to the database" + dbNewsflash);
-                })
-                .catch(function (err) {
-                    // If an error occurred, send it to the client
-                    return res.json(err);
-                });
-        });
-
-
-        // Log the results once you've looped through each of the elements found with cheerio
-    });
-    // getNewsFlashes(res);
-    // setTimeout(getNewsFlashes(res), 3000);
-    // setTimeout(function(){ alert("Hello"); }, 3000);
+    newsScrape(req, res);
+    // setTimeout(function () {
+    //     getNewsFlashes(res);
+    // }, 4000);
     // setTimeout(getNewsFlashes, 3000);
-
-
-    // // getNewsFlashes(res);
-    getNewsFlashes(res);
+    // getNewsFlashes(req, res);
 });
 
 
@@ -173,7 +214,6 @@ router.put("/api/savednews/:id", function (req, res) {
         }
     }).then(function (data, err) {
         console.log("I'm out of the database");
-
         if (err) {
             // If an error occurred, send a generic server failure
             console.log("an error occurred");
@@ -214,36 +254,32 @@ router.delete("/api/savednews/:id", function (req, res) {
 });
 
 // Route to get existing notes on an article
-router.get("/api/notes/:id", function (req, res) {
+router.get("/notes/:id", function (req, res) {
+    console.log(req.params.id);
     // Using the id passed in the id parameter 
-    db.Newsflash.findOne({
-            "_id": req.params.id
-        })
-        // ..and populate all of the notes associated with it
-        .populate("notes")
-        .then(function (dbNewsflash) {
-            console.log("I'm in get notes in the controller");
-            // If we were able to successfully find an Article with the given id, send it back to the client
-            console.log(dbNewsflash);
-            res.json(dbNewsflash);
-        })
-        .catch(function (err) {
-            // If an error occurred, send it to the client
-            res.json(err);
-        });
+    getNotes(req, res);
+
 });
 
 // Route to add a new note
 router.post("/api/notes/:id", function (req, res) {
-    db.Notes.create(data)
+    id = req.params.id;
+    console.log("req is" + req.body.text);
+    // console.log("req.body.text is" + req.body);
+    console.log("req.params.id is" + id);
+    db.Notes.create({
+            _id: req.params.id,
+            text: req.body.text
+        })
         .then(function (dbNotes) {
             // View the added result in the console
-            console.log("dbNotes after posting new note to the database");
+            console.log("dbNotes after posting new note to the database" + dbNotes);
         })
         .catch(function (err) {
             // If an error occurred, send it to the client
             return res.json(err);
         });
+    // getNotes(req, res);
 });
 
 // Route to delete a note
@@ -262,6 +298,7 @@ router.delete("/api/notes/:id", function (req, res) {
             console.log("note is deleted");
         }
     });
+    getNotes(req, res);
 });
 
 // export router for server.js 
