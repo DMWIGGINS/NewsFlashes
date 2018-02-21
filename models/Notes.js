@@ -17,6 +17,11 @@ var NotesSchema = new Schema({
     type: Boolean,
     default: true
   },
+
+  newsflash: {
+    type: Schema.Types.ObjectId,
+    ref: "Newsflash"
+  }
 });
 // This creates our model from the above schema, using mongoose's model method
 var Notes = mongoose.model("Notes", NotesSchema);
