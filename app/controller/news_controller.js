@@ -27,7 +27,9 @@ function newsScrape(req, res) {
 
             // Save the article summary in a "summary" variable
             // accessing the link to the article by the "href" attribute of it's great grandparents
-            var link = $(element).parent().parent().parent().attr("href");
+            var linkPath = $(element).parent().parent().parent().attr("href");
+            var linkRoot = "https://www.usatoday.com/";
+            var link = linkRoot + linkPath;
 
             results.push({
                 title: title,
@@ -140,25 +142,26 @@ function savedNewsFlashes(req, res) {
 // get the notes related to a specific article
 function getNotes(req, res) {
     db.Newsflash.findOne({
-            _id: req.params.id
+            id: req.params.id
         })
         // ..and populate all of the notes associated with it
         .populate("Notes")
         .then(function (data, err) {
             console.log("I'm in get notes in the controller");
-            console.log(data);
+
             // If we were able to successfully find an Article with the given id, send it back to the client
             var existingNotes = [];
             if (err) {
                 res.status(500).end();
-            } else if (data[0]) {
+            } else if (data) {
                 console.log("I'm in the notes gatherer");
+
                 var notes = {};
                 for (let i = 0; i < data.length; i++) {
                     note = {
                         text: note.text,
-                        id: data[i].id,
-                        notes: data[i].notes
+                        id: req.params.id
+                        // notes: data[i].notes
                     }
                     existingNotes.push(note);
                     // console.log(data[0].notes);
@@ -226,14 +229,14 @@ router.put("/api/savednews/:id", function (req, res) {
             res.status(500).end();
         } else if (data) {
             console.log(data);
-            console.log("article is deleted");
+            console.log("article is saved");
             savedNewsFlashes(req, res);
         }
     });
 
 });
 
-// Route to  an delete an article from the saved list
+// Route to delete an article from the saved list
 router.delete("/api/savednews/:id", function (req, res) {
 
     console.log("controller deleting article");
@@ -273,19 +276,36 @@ router.post("/api/notes/:id", function (req, res) {
     // console.log("req.body.text is" + req.body);
     console.log("req.params.id is" + id);
     db.Notes.create({
-            _id: req.params.id,
+            // newsflash: req.params.id,
+
             text: req.body.text
         })
         .then(function (dbNotes) {
             // View the added result in the console
             console.log("dbNotes after posting new note to the database" + dbNotes);
+            console.log("dbNotes_id is " + dbNotes._id);
+            console.log(req.params.id);
+            return db.Newsflash.findOneAndUpdate({
+                _id: req.params.id
+            }, {
+                notes: dbNotes._id
+            }, {
+                new: true
+            })
+        })
+        .then(function (dbNewsflash) {
+
+            console.log("dbNewsflash" + dbNewsflash);
+            getNotes(res);
+
         })
         .catch(function (err) {
             // If an error occurred, send it to the client
             return res.json(err);
         });
-    // getNotes(req, res);
+
 });
+
 
 // Route to delete a note
 router.delete("/api/notes/:id", function (req, res) {
