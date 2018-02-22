@@ -98,7 +98,7 @@ function getNewsFlashes(req, res) {
         });
 };
 
-// grab all savedNewsFlases and render them to the savednews page using handlebars
+// grab all savedNewsFlashes and render them to the savednews page using handlebars
 function savedNewsFlashes(req, res) {
     console.log("I'm in savedNewsFlashes");
 
@@ -141,39 +141,57 @@ function savedNewsFlashes(req, res) {
 
 // get the notes related to a specific article
 function getNotes(req, res) {
+    console.log(req.params.id);
     db.Newsflash.findOne({
-            id: req.params.id
+            _id: req.params.id
         })
         // ..and populate all of the notes associated with it
-        .populate("Notes")
+
+        .populate("notes")
         .then(function (data, err) {
             console.log("I'm in get notes in the controller");
+            console.log("data is " + data);
 
             // If we were able to successfully find an Article with the given id, send it back to the client
             var existingNotes = [];
+            console.log(data.notes);
             if (err) {
                 res.status(500).end();
-            } else if (data) {
+            } else
+            if (data) {
                 console.log("I'm in the notes gatherer");
+                console.log(data);
+                // console.log(data.notes.text);
+                // console.log(data.notes.saved);
+                // console.log(data.notes._id);
 
-                var notes = {};
-                for (let i = 0; i < data.length; i++) {
-                    note = {
-                        text: note.text,
-                        id: req.params.id
-                        // notes: data[i].notes
-                    }
-                    existingNotes.push(note);
+                // var i = 0;
+                // for (i = 0; i < data.notes.length; i++) {
+                if (data.notes !== null) {
+                    existingNotes = data.notes;
+                    // var note = {
+                    //     text: data.notes.text,
+                    //     saved: data.notes.saved,
+                    //     _id: data.notes._id
+
+                    // }
+                    // console.log("note is " + note);
+                    // existingNotes.push(note);
                     // console.log(data[0].notes);
-                    // console.log(data[0].id);
+                    // console.log(data[0]._id);
                     // console.log(data[0].text);
                     console.log(existingNotes);
                 }
+                console.log("rendering array");
                 res.render("notes", {
-                    notesList: existingNotes
+                    existingNotes,
+                    id: req.params.id
+
                 });
+
             } else {
 
+                console.log("empty else");
                 res.render("notes", {
                     id: req.params.id
 
@@ -289,8 +307,6 @@ router.post("/api/notes/:id", function (req, res) {
                 _id: req.params.id
             }, {
                 notes: dbNotes._id
-            }, {
-                new: true
             })
         })
         .then(function (dbNewsflash) {
@@ -310,7 +326,7 @@ router.post("/api/notes/:id", function (req, res) {
 // Route to delete a note
 router.delete("/api/notes/:id", function (req, res) {
     db.Notes.deleteOne({
-        "_id": req.params.id
+        _id: req.params.id
     }).then(function (data, err) {
         console.log("I'm out of the database delete");
         if (err) {

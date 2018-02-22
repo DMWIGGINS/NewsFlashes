@@ -45,11 +45,11 @@
             </thead>
 
             <tbody id="notesTable">
-                {{#each notesList}} {{#if saved}}
+                {{#each existingNotes}} {{#if saved}}
                 <tr class="table-info">
-                    <th scope="row">{{this.text}}</th>
+                    <th scope="row"> {{this.text}} </th>
                     <th>
-                        <button class="btn btn-danger" id="deleteNotesBtn" data-id="{{this.id}}">Delete Note</button>
+                        <button class="btn btn-danger" id="deleteNotesBtn" data-id="{{_id}}">Delete Note</button>
                     </th>
                 </tr>
                 {{/if}} {{/each}}
@@ -66,10 +66,11 @@
             </tbody>
         </table>
     </div>
-    
+
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">NewsFlashes scraped from USA Today</a>
     </nav>
 
 </body>
+
 </html>
