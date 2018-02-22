@@ -24,6 +24,8 @@ $(document).on('click', '#addNotesBtn', function (event) {
 $(document).on('click', '#deleteNotesBtn', function (event) {
     console.log("deleteNotesBtn clicked");
     var id = $(this).data("id");
+    console.log(id);
+
     $.ajax("/api/notes/" + id, {
         type: "DELETE",
     }).then(
