@@ -57,7 +57,7 @@ app.use("/", routes);
 
 // Setting up database connection
 mongoose.Promise = Promise;
-mongoose.connect("mongodb://localhost/Newsflashes");
+mongoose.connect("mongodb://heroku_75tg9ssd:aspj7bfu2ps2g6cvjhqj3d8f3q@ds245518.mlab.com:45518/heroku_75tg9ssd");
 
 
 app.listen(PORT, function () {
