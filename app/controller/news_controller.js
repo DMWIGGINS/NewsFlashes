@@ -303,13 +303,13 @@ router.post("/api/notes/:id", function (req, res) {
             console.log("dbNotes after posting new note to the database" + dbNotes);
             console.log("dbNotes_id is " + dbNotes._id);
             console.log(req.params.id);
-            // var note = dbNotes._id;
+            var note = {"notes": dbNotes._id};
         })
     return db.Newsflash.findOneAndUpdate({
             _id: req.params.id
         }, {
             $push: {
-                notes: dbNotes_id
+                notes: note
             }
         })
         .then(function (dbNewsflash) {
