@@ -303,11 +303,14 @@ router.post("/api/notes/:id", function (req, res) {
             console.log("dbNotes after posting new note to the database" + dbNotes);
             console.log("dbNotes_id is " + dbNotes._id);
             console.log(req.params.id);
-            return db.Newsflash.findOneAndUpdate({
-                _id: req.params.id
-            }, {
-                notes: dbNotes._id
-            })
+            // var note = dbNotes._id;
+        })
+    return db.Newsflash.findOneAndUpdate({
+            _id: req.params.id
+        }, {
+            $push: {
+                notes: dbNotes_id
+            }
         })
         .then(function (dbNewsflash) {
 
@@ -321,7 +324,6 @@ router.post("/api/notes/:id", function (req, res) {
         });
 
 });
-
 
 // Route to delete a note
 router.delete("/api/notes/:id", function (req, res) {
