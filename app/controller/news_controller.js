@@ -309,9 +309,9 @@ router.post("/api/notes/:id", function (req, res) {
             _id: req.params.id
         }, {
             // $push: {
-            // notes: note
+            //     notes: note
             // }
-            notes: dbNotes_id
+            notes: push(dbNotes_id)
         })
         .then(function (dbNewsflash) {
 
