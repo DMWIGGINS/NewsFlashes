@@ -3,7 +3,7 @@ $(document).on('click', '#addNotesBtn', function (event) {
     console.log("addNotesBtn clicked");
 
     var id = $(this).data("id");
-    console.log(id);;
+    console.log(id);
     var newNote = {
         _id: id,
         text: $("#newNote").val().trim()
